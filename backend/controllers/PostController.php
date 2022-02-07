@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\UserSearch;
 use common\models\Post;
 use backend\models\PostSearch;
 use yii\web\Controller;
@@ -41,11 +42,14 @@ class PostController extends Controller
     public function actionIndex()
     {
         $searchModel = new PostSearch();
+        $searchModelUser = new UserSearch();
+        $dataProviderUser = $searchModelUser->search($this->request->queryParams);
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+
         ]);
     }
 

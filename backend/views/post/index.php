@@ -1,6 +1,7 @@
 <?php
 
 use common\models\Post;
+use common\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -26,12 +27,24 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'postId',
             'text',
-            'userId',
+            [
+                'attribute' => 'userId',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $userId = $model->userId;
+                    $user = User::findOne($userId);
+
+                    return Html::a($user->username,
+                        Url::toRoute(['user/view', 'id' => $user->id]));
+
+                }
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Post $model, $key, $index, $column) {

@@ -36,7 +36,8 @@ class PostController extends \yii\web\Controller
             'posts' => $result,
         ];
     }
-    public function actionCreatePost(){
+    public function actionCreatePost()
+    {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         $accessToken = \Yii::$app->request->post('accessToken');
@@ -48,8 +49,7 @@ class PostController extends \yii\web\Controller
         ])->one();
 
 
-        if(empty($user))
-        {
+        if (empty($user)) {
             return [
                 'success' => false,
             ];
@@ -72,7 +72,7 @@ class PostController extends \yii\web\Controller
             'success' => true,
         ];
     }
-    public function actionMyPostList(){
+    public function actionMyPostList() {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $limit = \Yii::$app->request->get('limit', 10);
         $offset = \Yii::$app->request->get('offset', 0);
