@@ -7,7 +7,6 @@ use common\models\Post;
 use Yii;
 
 
-//TODO: https://www.notion.so/whitetigersoft/JSON-d6d56c459683463fa80146aab25a8295
 class UserController extends \yii\web\Controller
 {
     //Отключаем Csrf защиту
@@ -53,7 +52,7 @@ class UserController extends \yii\web\Controller
         /**
          * @var User $user
          */
-        $user = User::find()->where([
+        $user = User::find()->andWhere([
             'email' => $email,
         ])->one();
 

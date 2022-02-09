@@ -30,15 +30,10 @@ class User extends BaseUser implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+    const ROLE_ADMIN = 2;
+    const ROLE_USER = 1;
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return '{{%user}}';
-    }
+    // TODO завести константы https://www.notion.so/whitetigersoft/061626c46ce8467b8fc171e76f98b80a
 
     /**
      * {@inheritdoc}
@@ -66,7 +61,7 @@ class User extends BaseUser implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['userId' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -74,7 +69,7 @@ class User extends BaseUser implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['accessToken' => $token, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**

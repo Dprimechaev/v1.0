@@ -2,33 +2,30 @@
 
 namespace common\models;
 
-use common\models\BasePost;
+
 use yii\base\Model;
 use Yii;
 use yii\db\ActiveRecord;
 
-
-//TODO: move to common
-/**
- * Password reset form
- */
-
-//TODO: try base
-// https://www.notion.so/whitetigersoft/Base-29ffa9f1b7ca4daf94f1cb29a3128b8e
-// https://www.notion.so/whitetigersoft/Base-330f12ebc66941dfb588048307fc6c10
 class Post extends BasePost
 {
-    public static function tableName()
+    public function attributeLabels()
     {
-        return '{{post}}';
+        return [
+            'postId' => 'ID',
+            'text' => 'Текст',
+            'userId' => 'Пользователь',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
     }
 
     public function rules()
     {
-        return [
+        return array_merge(parent::rules(), [
             [['text'], 'required'],
             [['userId'], 'required'],
-        ];
+        ]);
     }
 
     public function serializeToArray()
@@ -41,4 +38,6 @@ class Post extends BasePost
 
         return $serializedData;
     }
+
+
 }

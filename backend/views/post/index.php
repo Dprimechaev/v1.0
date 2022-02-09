@@ -37,6 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'userId',
                 'format' => 'raw',
                 'value' => function ($model) {
+                    // TODO обращаться к пользователю после перегенерации BasePost
+            //                    $model->user
                     $userId = $model->userId;
                     $user = User::findOne($userId);
 

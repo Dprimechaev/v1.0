@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "user".
  *
- * @property int $id
+ * @property int $userId
  * @property string $username
  * @property string $auth_key
  * @property string|null $accessToken
@@ -20,6 +20,8 @@ use yii\db\ActiveRecord;
  * @property int $updated_at
  * @property string|null $verification_token
  * @property int|null $role
+ *
+ * @property Post[] $posts
  */
 class BaseUser extends ActiveRecord
 {
@@ -53,7 +55,7 @@ class BaseUser extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'userId' => 'User ID',
             'username' => 'Username',
             'auth_key' => 'Auth Key',
             'accessToken' => 'Access Token',
@@ -66,5 +68,15 @@ class BaseUser extends ActiveRecord
             'verification_token' => 'Verification Token',
             'role' => 'Role',
         ];
+    }
+
+    /**
+     * Gets query for [[Posts]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPosts()
+    {
+        return $this->hasMany(Post::className(), ['userId' => 'userId']);
     }
 }

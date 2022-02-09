@@ -4,49 +4,62 @@ namespace frontend\controllers;
 
 use common\models\User;
 use common\models\Post;
+use frontend\models\PostCreateForm;
+use frontend\models\PostListForm;
 use Yii;
 
-
-//TODO: https://www.notion.so/whitetigersoft/JSON-d6d56c459683463fa80146aab25a8295
 class PostController extends \yii\web\Controller
 {
     //Отключаем Csrf защиту
     public $enableCsrfValidation = false;
 
-    public function actionAllPostList()
+    public function beforeAction($action)
     {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $limit = \Yii::$app->request->get('limit', 10);
-        $offset = \Yii::$app->request->get('offset', 0);
-        $postQuery = Post::find()
-            ->orderBy(['post.postId' => SORT_DESC])
-            ->limit($limit)
-            ->offset($offset);
-        $result = [];
 
-
-        foreach ($postQuery->each() as $post) {
-            //TODO: https://www.notion.so/whitetigersoft/a62eaa37c1c54d48a3ca044999243ce5
-
-            $result[] = $post->serializeToArray();
+        if (!parent::beforeAction($action)) {
+            return false;
         }
 
-        return [
-            'posts' => $result,
-        ];
-    }
-    public function actionCreatePost()
-    {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+        return true; // or false to not run the action
+    }
+
+    public function actionAllPostList()
+    {
+        $model = new PostListForm();
+        if ($model->load(Yii::$app->request->get(), '') && $model->validate() && $model->find()) {
+            return $model->serializeResponseToArray();
+        } else {
+            return 'error';
+        }
+    }
+    public function actionMyPostList()
+    {
+        $accessToken = \Yii::$app->request->get('accessToken');
+
+        $user = User::findIdentityByAccessToken($accessToken);
+        if (empty($user)){
+            return 'error';
+        }
+        $model = new PostListForm();
+        $model->userId = $user->userId;
+        if ($model->load(Yii::$app->request->get(), '') && $model->validate() && $model->find()) {
+            return $model->serializeResponseToArray();
+        } else {
+            return 'error';
+        }
+    }
+
+    public function actionCreatePost()
+    {
         $accessToken = \Yii::$app->request->post('accessToken');
         $text = \Yii::$app->request->post('text');
 
-
-        $user = User::find()->where([
-            'accessToken' => $accessToken,
-        ])->one();
-
+        $user = User::find()->andWhere([
+                'accessToken' => $accessToken,
+            ])
+            ->one();
 
         if (empty($user)) {
             return [
@@ -54,9 +67,9 @@ class PostController extends \yii\web\Controller
             ];
         }
 
-        $model = Post::find()->where([
-            'userId' => $user->id,
-        ])->one();
+        $model = Post::find()
+            ->andWhere(['userId' => $user->id])
+            ->one();
 
         $userId = $model->userId;
 
@@ -71,34 +84,22 @@ class PostController extends \yii\web\Controller
             'success' => true,
         ];
     }
-    public function actionMyPostList() {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $limit = \Yii::$app->request->get('limit', 10);
-        $offset = \Yii::$app->request->get('offset', 0);
-        $accessToken = \Yii::$app->request->get('accessToken');
+    public function actionCreatePost1()
+    {
+        $accessToken = \Yii::$app->request->post('accessToken');
 
-        $model = User::find()->where([
-            'accessToken' => $accessToken,
-        ])->one();
-
-
-        $postQuery = Post::find()->where([
-            'userId' => $model->id,
-        ])
-            ->orderBy(['post.postId' => SORT_DESC])
-            ->limit($limit)
-            ->offset($offset);
-
-        $result = [];
-
-        foreach ($postQuery->each() as $post) {
-            //TODO: https://www.notion.so/whitetigersoft/a62eaa37c1c54d48a3ca044999243ce5
-            $result[] = $post->serializeToArray();
+        $user = User::findIdentityByAccessToken($accessToken);
+        if (empty($user)){
+            return 'error';
         }
 
-        return [
-            'posts' => $result,
-        ];
-    }
+        $model = new PostCreateForm();
+        $model->userId = $user->userId;
 
+        if ($model->load(Yii::$app->request->post(), '') && $model->validate() && $model->create()) {
+            return $model->serializeResponseToArray();
+        } else {
+            return $model->getErrors();
+        }
+    }
 }
