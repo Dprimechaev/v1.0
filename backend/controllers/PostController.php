@@ -42,8 +42,6 @@ class PostController extends Controller
     public function actionIndex()
     {
         $searchModel = new PostSearch();
-        $searchModelUser = new UserSearch();
-        $dataProviderUser = $searchModelUser->search($this->request->queryParams);
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [

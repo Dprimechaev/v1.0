@@ -24,12 +24,11 @@ class PostController extends \yii\web\Controller
             ->offset($offset);
         $result = [];
 
+
         foreach ($postQuery->each() as $post) {
-            //TODO: https://www.notion.so/whitetigersoft/d6320d2e835b46ec87b47642b42dd816
-            $result[] = [
-                'postId' => $post->postId,
-                'text' => $post->text,
-            ];
+            //TODO: https://www.notion.so/whitetigersoft/a62eaa37c1c54d48a3ca044999243ce5
+
+            $result[] = $post->serializeToArray();
         }
 
         return [
@@ -93,11 +92,8 @@ class PostController extends \yii\web\Controller
         $result = [];
 
         foreach ($postQuery->each() as $post) {
-            //TODO: https://www.notion.so/whitetigersoft/d6320d2e835b46ec87b47642b42dd816
-            $result[] = [
-                'postId' => $post->postId,
-                'text' => $post->text,
-            ];
+            //TODO: https://www.notion.so/whitetigersoft/a62eaa37c1c54d48a3ca044999243ce5
+            $result[] = $post->serializeToArray();
         }
 
         return [

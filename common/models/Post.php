@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\models\BasePost;
 use yii\base\Model;
 use Yii;
 use yii\db\ActiveRecord;
@@ -15,7 +16,7 @@ use yii\db\ActiveRecord;
 //TODO: try base
 // https://www.notion.so/whitetigersoft/Base-29ffa9f1b7ca4daf94f1cb29a3128b8e
 // https://www.notion.so/whitetigersoft/Base-330f12ebc66941dfb588048307fc6c10
-class Post extends ActiveRecord
+class Post extends BasePost
 {
     public static function tableName()
     {
@@ -30,4 +31,14 @@ class Post extends ActiveRecord
         ];
     }
 
+    public function serializeToArray()
+    {
+        $serializedData = [];
+
+        $serializedData['text'] = $this->text;
+        $serializedData['postId'] = $this->postId;
+        $serializedData['userId'] = $this->userId;
+
+        return $serializedData;
+    }
 }
