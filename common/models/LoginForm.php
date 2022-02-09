@@ -44,6 +44,9 @@ class LoginForm extends Model
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
             }
+            if (!empty($user) && $user->role != User::ROLE_ADMIN ) {
+                $this->addError($attribute,'Вы не являетесь администратором');
+            }
         }
     }
 
@@ -57,11 +60,7 @@ class LoginForm extends Model
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
         }
-        $user = $this->getUser();
 
-        if (!empty($user) && $user->role != User::ROLE_ADMIN ) {
-            $this->addError('Вы не являетесь администратором');
-        }
 
         return false;
     }

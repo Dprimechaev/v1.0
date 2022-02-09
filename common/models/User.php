@@ -33,6 +33,7 @@ class User extends BaseUser implements IdentityInterface
     const ROLE_ADMIN = 2;
     const ROLE_USER = 1;
 
+    public $password;
     // TODO завести константы https://www.notion.so/whitetigersoft/061626c46ce8467b8fc171e76f98b80a
 
     /**
@@ -50,10 +51,13 @@ class User extends BaseUser implements IdentityInterface
      */
     public function rules()
     {
-        return [
+        return array_merge(parent::rules(), [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['password','string'],
+             ['password','string'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
-        ];
+        ]);
+
     }
 
     /**
@@ -78,6 +82,19 @@ class User extends BaseUser implements IdentityInterface
      * @param string $username
      * @return static|null
      */
+
+    public function load($data, $formName = null)
+    {
+        $result = parent::load($data, $formName);
+        self::generateAuthKey();
+        if (isset($data['User']['password'])) {
+            if (!empty($data['User']['password'])) {
+                $this->setPassword($data['User']['password']);
+            }
+        }
+        return $result;
+    }
+
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);

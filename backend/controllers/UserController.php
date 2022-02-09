@@ -70,6 +70,8 @@ class UserController extends Controller
         $model = new User();
 
         if ($this->request->isPost) {
+            $model->created_at = time();
+            $model->updated_at = time();
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'userId' => $model->userId]);
             }
@@ -92,7 +94,7 @@ class UserController extends Controller
     public function actionUpdate($userId)
     {
         $model = $this->findModel($userId);
-
+        $model->updated_at = time();
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'userId' => $model->userId]);
         }
