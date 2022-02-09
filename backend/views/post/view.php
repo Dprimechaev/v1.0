@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Post */
+/* @var $model common\models\Post */
 
 $this->title = $model->postId;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];
@@ -32,6 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'postId',
             'text',
             'userId',
+            'created_at',
+            'updated_at',
         ],
     ]) ?>
 

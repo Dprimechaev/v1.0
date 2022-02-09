@@ -27,7 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -37,16 +36,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'userId',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    // TODO обращаться к пользователю после перегенерации BasePost
-            //                    $model->user
                     $userId = $model->userId;
                     $user = User::findOne($userId);
+                    if (empty($user)) {
+                        return null;
+                    }
 
                     return Html::a($user->username,
-                        Url::toRoute(['user/view', 'id' => $user->id]));
+                        Url::toRoute(['user/view', 'userId' => $user->userId]));
 
                 }
             ],
+            'created_at',
+            'updated_at',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Post $model, $key, $index, $column) {

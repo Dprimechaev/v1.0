@@ -1,5 +1,6 @@
 <?php
 
+use common\models\User;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -28,22 +29,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            'userId',
             'username',
-            'role',
-            'accessToken',
             'auth_key',
-            //'password_hash',
+            'accessToken',
+            'password_hash',
             //'password_reset_token',
             //'email:email',
             //'status',
             //'created_at',
             //'updated_at',
+            //'verification_token',
+            //'role',
             [
                 'class' => ActionColumn::className(),
-//                'urlCreator' => function ($action, User $model, $key, $index, $column) {
-//                    return Url::toRoute([$action, 'id' => $model->id]);
-//                 }
+                'urlCreator' => function ($action, User $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'userId' => $model->userId]);
+                 }
             ],
         ],
     ]); ?>

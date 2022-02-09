@@ -62,7 +62,7 @@ class UserController extends \yii\web\Controller
                 'success' => false,
             ];
         }
-        if(!$user->validatePassword($password)){
+        if(!$user->validatePassword($password)) {
             return[
                 'success' => false,
             ];

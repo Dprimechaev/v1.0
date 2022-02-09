@@ -54,42 +54,9 @@ class PostController extends \yii\web\Controller
     public function actionCreatePost()
     {
         $accessToken = \Yii::$app->request->post('accessToken');
-        $text = \Yii::$app->request->post('text');
-
-        $user = User::find()->andWhere([
-                'accessToken' => $accessToken,
-            ])
-            ->one();
-
-        if (empty($user)) {
-            return [
-                'success' => false,
-            ];
-        }
-
-        $model = Post::find()
-            ->andWhere(['userId' => $user->id])
-            ->one();
-
-        $userId = $model->userId;
-
-        $post = new Post();
-
-        $post->text = $text;
-        $post->userId = $userId;
-
-        $post->save();
-
-        return [
-            'success' => true,
-        ];
-    }
-    public function actionCreatePost1()
-    {
-        $accessToken = \Yii::$app->request->post('accessToken');
 
         $user = User::findIdentityByAccessToken($accessToken);
-        if (empty($user)){
+        if (empty($user)) {
             return 'error';
         }
 

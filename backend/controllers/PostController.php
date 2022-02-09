@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use backend\models\UserSearch;
 use common\models\Post;
 use backend\models\PostSearch;
 use yii\web\Controller;
@@ -14,8 +13,6 @@ use yii\filters\VerbFilter;
  */
 class PostController extends Controller
 {
-    //Отключаем Csrf защиту
-    public $enableCsrfValidation = false;
     /**
      * @inheritDoc
      */
@@ -47,13 +44,12 @@ class PostController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-
         ]);
     }
 
     /**
      * Displays a single Post model.
-     * @param int $postId
+     * @param int $postId ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -89,7 +85,7 @@ class PostController extends Controller
     /**
      * Updates an existing Post model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $postId
+     * @param int $postId ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -109,7 +105,7 @@ class PostController extends Controller
     /**
      * Deletes an existing Post model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $postId
+     * @param int $postId ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -123,7 +119,7 @@ class PostController extends Controller
     /**
      * Finds the Post model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $postId
+     * @param int $postId ID
      * @return Post the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

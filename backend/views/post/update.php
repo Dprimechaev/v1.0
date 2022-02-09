@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Post */
+/* @var $model common\models\Post */
 
 $this->title = 'Update Post: ' . $model->postId;
 $this->params['breadcrumbs'][] = ['label' => 'Posts', 'url' => ['index']];

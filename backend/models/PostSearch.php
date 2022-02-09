@@ -2,13 +2,12 @@
 
 namespace backend\models;
 
-use common\models\Post;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-
+use common\models\Post;
 
 /**
- * PostSearch represents the model behind the search form of `frontend\models\Post`.
+ * PostSearch represents the model behind the search form of `common\models\Post`.
  */
 class PostSearch extends Post
 {
@@ -18,7 +17,7 @@ class PostSearch extends Post
     public function rules()
     {
         return [
-            [['postId', 'userId'], 'integer'],
+            [['postId', 'userId', 'created_at', 'updated_at'], 'integer'],
             [['text'], 'safe'],
         ];
     }
@@ -61,6 +60,8 @@ class PostSearch extends Post
         $query->andFilterWhere([
             'postId' => $this->postId,
             'userId' => $this->userId,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ]);
 
         $query->andFilterWhere(['like', 'text', $this->text]);
