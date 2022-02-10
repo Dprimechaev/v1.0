@@ -83,7 +83,7 @@ class User extends BaseUser implements IdentityInterface
     public function load($data, $formName = null)
     {
         $result = parent::load($data, $formName);
-        self::generateAuthKey();
+//        self::generateAuthKey();
         if (isset($data['User']['password'])) {
             if (!empty($data['User']['password'])) {
                 $this->setPassword($data['User']['password']);
