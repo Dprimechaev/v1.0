@@ -17,13 +17,19 @@ class UserController extends \yii\web\Controller
     /**
      * @throws \yii\base\Exception
      */
-
-
-    public function actionSignup()
+    public function beforeAction($action)
     {
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+        return true; // or false to not run the action
+    }
+
+    public function actionSignup()
+    {
         $model = new UserSignupForm();
 
         if ($model->load(Yii::$app->request->post(), '') && $model->validate() && $model->create()) {
@@ -35,10 +41,7 @@ class UserController extends \yii\web\Controller
 
     public function actionSignin()
     {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
         $model = new UserSigninForm();
-
 
         if ($model->load(Yii::$app->request->post(), '') && $model->validate() && $model->auth()) {
             return $model->serializeResponseToArray();

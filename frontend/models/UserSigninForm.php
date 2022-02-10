@@ -38,11 +38,10 @@ class UserSigninForm extends Model
      */
     public function auth()
     {
-
-        $this->user = User::find()->andWhere([
+        $this->user = User::find()
+            ->andWhere([
             'email' => $this->email,
         ])->one();
-
 
         if (empty($this->user)) {
             $this->addError('email' ,'user with this email not found');
