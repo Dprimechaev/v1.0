@@ -4,6 +4,8 @@ namespace frontend\controllers;
 
 use common\models\User;
 use common\models\Post;
+use frontend\models\UserSigninForm;
+use frontend\models\UserSignupForm;
 use Yii;
 
 
@@ -15,68 +17,34 @@ class UserController extends \yii\web\Controller
     /**
      * @throws \yii\base\Exception
      */
+
+
     public function actionSignup()
     {
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $model = new User();
+        $model = new UserSignupForm();
 
-        $username = \Yii::$app->request->post('username');
-        $password = \Yii::$app->request->post('password');
-        $email = \Yii::$app->request->post('email');
-        $created_at = time();
-        $updated_at = time();
-
-        $model->username = $username;
-        $model->email = $email;
-        $model->created_at = $created_at;
-        $model->updated_at = $updated_at;
-
-        $model->accessToken = \Yii::$app->security->generateRandomString();
-        $model->generateAuthKey();
-        $model->setPassword($password);
-        if (!$model->save()) {
-            return [
-                'success' => false,
-            ];
+        if ($model->load(Yii::$app->request->post(), '') && $model->validate() && $model->create()) {
+            return $model->serializeResponseToArray();
+        } else {
+            return $model->getErrors();
         }
-
-        return [
-            'success' => true,
-            'accessToken' => $model->accessToken,
-        ];
     }
 
     public function actionSignin()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $email = \Yii::$app->request->post('email');
-        $password = \Yii::$app->request->post('password');
-
-        /**
-         * @var User $user
-         */
-        $user = User::find()->andWhere([
-            'email' => $email,
-        ])->one();
+        $model = new UserSigninForm();
 
 
-        if (empty($user)) {
-            return [
-                'success' => false,
-            ];
+        if ($model->load(Yii::$app->request->post(), '') && $model->validate() && $model->auth()) {
+            return $model->serializeResponseToArray();
+        } else {
+            return $model->getErrors();
         }
-        if (!$user->validatePassword($password)) {
-            return[
-                'success' => false,
-            ];
-        };
-        return [
-            'accessToken' => $user->accessToken,
-            'success' => true,
-        ];
     }
 
 

@@ -221,4 +221,13 @@ class User extends BaseUser implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public function serializeToArray()
+    {
+        $serializedData = [];
+
+        $serializedData['accessToken'] = $this->accessToken;
+
+        return $serializedData;
+    }
 }
