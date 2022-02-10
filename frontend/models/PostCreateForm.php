@@ -47,8 +47,6 @@ class PostCreateForm extends Model
         $this->post->updated_at = time();
 
         if (!$this->post->save()) {
-            //ошибка сохранения платежа обработана в форме
-            //и "всплывет" выше
             $this->addErrors($this->post->getErrors());
             return false;
         }

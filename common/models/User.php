@@ -31,11 +31,8 @@ class User extends BaseUser implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
     const ROLE_ADMIN = 2;
-    const ROLE_USER = 1;
 
     public $password;
-    // TODO завести константы https://www.notion.so/whitetigersoft/061626c46ce8467b8fc171e76f98b80a
-
     /**
      * {@inheritdoc}
      */
@@ -53,8 +50,8 @@ class User extends BaseUser implements IdentityInterface
     {
         return array_merge(parent::rules(), [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['username','string'],
             ['password','string'],
-             ['password','string'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ]);
 
@@ -80,7 +77,7 @@ class User extends BaseUser implements IdentityInterface
      * Finds user by username
      *
      * @param string $username
-     * @return static|null
+     * @return bool
      */
 
     public function load($data, $formName = null)

@@ -39,7 +39,7 @@ class PostController extends \yii\web\Controller
         $accessToken = \Yii::$app->request->get('accessToken');
 
         $user = User::findIdentityByAccessToken($accessToken);
-        if (empty($user)){
+        if (empty($user)) {
             return 'error';
         }
         $model = new PostListForm();

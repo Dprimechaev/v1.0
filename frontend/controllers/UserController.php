@@ -12,6 +12,9 @@ class UserController extends \yii\web\Controller
     //Отключаем Csrf защиту
     public $enableCsrfValidation = false;
 
+    /**
+     * @throws \yii\base\Exception
+     */
     public function actionSignup()
     {
 
@@ -22,14 +25,17 @@ class UserController extends \yii\web\Controller
         $username = \Yii::$app->request->post('username');
         $password = \Yii::$app->request->post('password');
         $email = \Yii::$app->request->post('email');
+        $created_at = time();
+        $updated_at = time();
 
         $model->username = $username;
         $model->email = $email;
+        $model->created_at = $created_at;
+        $model->updated_at = $updated_at;
 
         $model->accessToken = \Yii::$app->security->generateRandomString();
         $model->generateAuthKey();
         $model->setPassword($password);
-
         if (!$model->save()) {
             return [
                 'success' => false,
@@ -62,7 +68,7 @@ class UserController extends \yii\web\Controller
                 'success' => false,
             ];
         }
-        if(!$user->validatePassword($password)) {
+        if (!$user->validatePassword($password)) {
             return[
                 'success' => false,
             ];
