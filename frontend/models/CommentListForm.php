@@ -10,13 +10,14 @@ use yii\db\ActiveQuery;
  * Description of PostListForm
  *
  */
-class PostListForm extends Model
+class CommentListForm extends Model
 {
-    /** @var $_posts ActiveQuery $query */
-    private $_posts;
+    /** @var $comment ActiveQuery $query */
+    private $comments;
+    public $postId;
     public $limit;
     public $offset;
-    public $userId;
+
 
     /**
      * @inheritdoc
@@ -27,8 +28,7 @@ class PostListForm extends Model
             [['limit', 'offset'], 'integer'],
             [['limit'], 'default', 'value' => 10],
             [['offset'], 'default', 'value' => 0],
-            [['userId'], 'integer'],
-
+            ['postId', 'integer'],
         ];
     }
 
@@ -39,31 +39,31 @@ class PostListForm extends Model
      */
     public function find()
     {
-        $this->_posts = \common\models\Post::find()
-            ->orderBy(['post.postId' => SORT_DESC]);
-        if (!empty($this->userId)) {
-            $this->_posts->andWhere(['userId' => $this->userId]);
+        $this->comments = \common\models\Comment::find()
+            ->orderBy(['comment.postId' => SORT_DESC]);
+        if (!empty($this->postId)) {
+            $this->comments->andWhere(['postId' => $this->postId]);
         }
 
-        $this->_posts
+        $this->comments
             ->limit($this->limit)
             ->offset($this->offset);
 
         return true;
-    }
 
+    }
     /** Сериализация данных для ответа.
      * @return array
      */
     public function serializeResponseToArray()
     {
         $result = [];
-        foreach ($this->_posts->each() as $post) {
-            $result[] = $post->serializeToArray();
+        foreach ($this->comments->each() as $comment) {
+            $result[] = $comment->serializeToArray();
         }
 
         return [
-            'posts' => $result,
+            'comments' => $result,
         ];
     }
 }

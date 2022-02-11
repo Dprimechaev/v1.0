@@ -62,4 +62,8 @@ class BasePost extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['userId' => 'userId']);
     }
+    public function getComment()
+    {
+        return $this->hasMany(Comment::className(), ['postId' => 'postId']);
+    }
 }
